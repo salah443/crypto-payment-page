@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Signals Bot - Secure Payment</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="payment-container">
+        <header class="payment-header">
+            <h1>Crypto Signals Bot</h1>
+            <p>Secure Subscription Payment</p>
+        </header>
+
+        <main id="payment-info" class="payment-main">
+            <div class="info-group">
+                <label>Amount to Send</label>
+                <div id="payment-amount" class="info-value-large"></div>
+            </div>
+
+            <div class="info-group">
+                <label>USDT (TRC20) Address</label>
+                <div class="address-container">
+                    <span id="payment-address" class="info-value"></span>
+                    <button id="copy-button" title="Copy Address">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><path fill="currentColor" d="M208 0H332.1c12.7 0 24.9 5.1 33.9 14.1l67.9 67.9c9 9 14.1 21.2 14.1 33.9V336c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V48c0-26.5 21.5-48 48-48zM48 128h80v64H64V448H256V416h64v48c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V176c0-26.5 21.5-48 48-48z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="qr-code-area">
+                <div id="qrcode-container"></div>
+                <div class="qr-options">
+                    <button id="qr-address-only" class="qr-option-btn active">Address Only</button>
+                    <button id="qr-with-amount" class="qr-option-btn">With Amount</button>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ IMPORTANT</strong>
+                <p>You <em>must</em> send <strong>USDT</strong> on the <strong>TRC20 (Tron) network</strong>. Sending any other coin or using a different network will result in the permanent loss of your funds and the subscription will fail.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- External Library for QR Code Generation -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <!-- Our Custom Script -->
+    <script src="script.js"></script>
+</body>
+</html>
