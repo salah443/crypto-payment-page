@@ -1,31 +1,42 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Element selectors
     const amountEl = document.getElementById('payment-amount');
     const addressEl = document.getElementById('payment-address');
     const qrCodeContainer = document.getElementById('qrcode-container');
     const copyBtn = document.getElementById('copy-button');
     const addressOnlyBtn = document.getElementById('qr-address-only');
     const withAmountBtn = document.getElementById('qr-with-amount');
-    const paymentInfoEl = document.getElementById('payment-info');
+    const paymentView = document.getElementById('payment-view');
+    const confirmationView = document.getElementById('confirmation-view');
+    const paidBtn = document.getElementById('paid-button');
+    const timeLeftEl = document.getElementById('time-left');
+    const timerContainer = document.getElementById('timer-container');
 
+    // Get URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const address = urlParams.get('address');
     const amount = urlParams.get('amount');
     const currency = urlParams.get('currency');
 
+    // Validate parameters
     if (!address || !amount || !currency) {
-        paymentInfoEl.innerHTML = `
+        paymentView.innerHTML = `
             <div class="warning-box">
                 <strong>Error:</strong> Payment information is missing or invalid. 
-                Please go back to the bot and try the /subscribe command again.
+                Please return to the bot and use the /subscribe command again.
             </div>`;
         return;
     }
 
+    // --- INITIALIZE UI ---
     amountEl.textContent = `${amount} ${currency.toUpperCase()}`;
     addressEl.textContent = address;
+    document.title = `Pay ${amount} ${currency.toUpperCase()} - Signalyst`;
 
     let qrCodeInstance = null;
+    let timerInterval = null;
 
+    // --- QR CODE LOGIC ---
     function generateQRCode(withAmount = false) {
         qrCodeContainer.innerHTML = '';
         const qrText = withAmount 
@@ -54,12 +65,15 @@ document.addEventListener('DOMContentLoaded', () => {
         addressOnlyBtn.classList.remove('active');
     });
 
+    // --- COPY BUTTON LOGIC ---
     copyBtn.addEventListener('click', () => {
         navigator.clipboard.writeText(address).then(() => {
             const originalIcon = copyBtn.innerHTML;
             copyBtn.innerHTML = '✓';
+            copyBtn.style.color = 'var(--success-color)';
             setTimeout(() => {
                 copyBtn.innerHTML = originalIcon;
+                copyBtn.style.color = 'var(--secondary-text)';
             }, 1500);
         }).catch(err => {
             console.error('Failed to copy address: ', err);
@@ -67,5 +81,35 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    generateQRCode(false);
+    // --- PAYMENT TIMER LOGIC ---
+    let timeInSeconds = 15 * 60; // 15 minutes
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timeInSeconds--;
+            const minutes = Math.floor(timeInSeconds / 60).toString().padStart(2, '0');
+            const seconds = (timeInSeconds % 60).toString().padStart(2, '0');
+            timeLeftEl.textContent = `${minutes}:${seconds}`;
+
+            if (timeInSeconds <= 0) {
+                clearInterval(timerInterval);
+                paymentView.innerHTML = `
+                    <div class="warning-box">
+                        <strong>Session Expired</strong>
+                        <p>This payment request has expired. Please return to the bot and generate a new one.</p>
+                    </div>`;
+            }
+        }, 1000);
+    }
+
+    // --- "I HAVE PAID" BUTTON LOGIC ---
+    paidBtn.addEventListener('click', () => {
+        clearInterval(timerInterval); // Stop the timer
+        paymentView.style.display = 'none';
+        confirmationView.style.display = 'block';
+    });
+
+
+    // --- START EVERYTHING ---
+    generateQRCode(false); // Initial QR code
+    startTimer();
 });
