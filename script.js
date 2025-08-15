@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Validate parameters
     if (!address || !amount || !currency) {
+        // Hide the header if there's an error
+        document.querySelector('.payment-header').style.display = 'none';
         paymentView.innerHTML = `
             <div class="warning-box">
                 <strong>Error:</strong> Payment information is missing or invalid. 
@@ -101,11 +103,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
     }
 
-    // --- "I HAVE PAID" BUTTON LOGIC ---
+    // --- "I HAVE PAID" BUTTON LOGIC (WITH FADE TRANSITION) ---
     paidBtn.addEventListener('click', () => {
         clearInterval(timerInterval); // Stop the timer
-        paymentView.style.display = 'none';
-        confirmationView.style.display = 'block';
+
+        // 1. Fade out the current view
+        paymentView.style.opacity = '0';
+        paymentView.style.transform = 'translateY(-10px)';
+
+        setTimeout(() => {
+            // 2. After it fades, hide it and prepare the new one
+            paymentView.style.display = 'none';
+            confirmationView.style.display = 'block';
+            confirmationView.style.transform = 'translateY(10px)';
+            
+            // 3. Fade in the confirmation view
+            setTimeout(() => {
+                confirmationView.style.opacity = '1';
+                confirmationView.style.transform = 'translateY(0)';
+            }, 50); // Small delay for browser rendering
+
+        }, 400); // Matches CSS transition duration
     });
 
 

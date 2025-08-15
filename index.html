@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- The title will be dynamically updated by JavaScript -->
     <title>Secure Payment</title>
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,8 +13,9 @@
 </head>
 <body>
     <div class="payment-container">
+        <!-- HEADER IS NOW OUTSIDE the main views to keep it persistent -->
         <header class="payment-header">
-            <h1>Signalyst Payment Page</h1>
+            <h1>Signalyst Payment</h1>
             <p>Secure Subscription Service</p>
         </header>
 
@@ -35,7 +35,6 @@
                 <div class="address-container">
                     <span id="payment-address" class="info-value"></span>
                     <button id="copy-button" title="Copy Address">
-                        <!-- New, modern SVG Icon -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -61,7 +60,7 @@
         </main>
 
         <!-- Confirmation/Post-Payment View (Initially Hidden) -->
-        <main id="confirmation-view" class="payment-main" style="display: none;">
+        <main id="confirmation-view" class="payment-main" style="display: none; opacity: 0;">
             <div class="confirmation-icon">✓</div>
             <h2>Payment Submitted</h2>
             <p class="confirmation-text">
